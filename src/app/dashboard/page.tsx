@@ -19,6 +19,9 @@ import {
   AlertCircle,
   Menu,
   X,
+  Search,
+  Filter,
+  ChevronDown,
 } from "lucide-react";
 import Link from "next/link";
 import toast from "react-hot-toast";
@@ -227,6 +230,67 @@ const StatSubtext = styled.p`
   margin-top: 0.5rem;
 `;
 
+// Search & Filter Bar
+const SearchBar = styled.div`
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+`;
+
+const SearchInput = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: white;
+  border-radius: 0.75rem;
+  padding: 0.6rem 1rem;
+  gap: 0.5rem;
+  max-width: 350px;
+
+  input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 0.875rem;
+    background: transparent;
+  }
+`;
+
+const FilterSelect = styled.select`
+  padding: 0.6rem 1rem;
+  border-radius: 0.75rem;
+  border: none;
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  min-width: 140px;
+`;
+
+const SortButton = styled.button`
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1rem;
+  border-radius: 0.75rem;
+  border: none;
+  background: white;
+  cursor: pointer;
+  font-size: 0.875rem;
+  transition: all 0.2s;
+
+  &:hover {
+    background: #f3f4f6;
+  }
+`;
+
+const ResultsCount = styled.div`
+  color: white;
+  font-size: 0.875rem;
+  margin-bottom: 1rem;
+  opacity: 0.8;
+`;
+
 const SectionHeader = styled.div`
   display: flex;
   justify-content: space-between;
@@ -421,10 +485,19 @@ interface Application {
   jobExpirationDate?: string;
 }
 
+type SortOrder = "latest" | "oldest";
+
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const router = useRouter();
   const [applications, setApplications] = useState<Application[]>([]);
+  const [filteredApplications, setFilteredApplications] = useState<
+    Application[]
+  >([]);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [statusFilter, setStatusFilter] = useState<string>("ALL");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("latest");
+  const [showSortMenu, setShowSortMenu] = useState<boolean>(false);
   const [stats, setStats] = useState({
     total: 0,
     interviewing: 0,
@@ -439,6 +512,7 @@ export default function DashboardPage() {
       const response = await fetch("/api/applications");
       const data = await response.json();
       setApplications(data);
+      setFilteredApplications(data);
 
       const interviewing = data.filter((app: Application) =>
         ["PHONE_SCREEN", "TECHNICAL", "ONSITE"].includes(app.status),
@@ -476,10 +550,38 @@ export default function DashboardPage() {
     if (status === "unauthenticated") {
       router.push("/login");
     } else if (status === "authenticated") {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
       fetchApplications();
     }
   }, [status, router]);
+
+  // Filter and sort applications whenever search, filter, or applications change
+  useEffect(() => {
+    let filtered = [...applications];
+
+    // Filter by status
+    if (statusFilter !== "ALL") {
+      filtered = filtered.filter((app) => app.status === statusFilter);
+    }
+
+    // Filter by search term
+    if (searchTerm.trim() !== "") {
+      const term = searchTerm.toLowerCase();
+      filtered = filtered.filter(
+        (app) =>
+          app.jobTitle.toLowerCase().includes(term) ||
+          app.company.toLowerCase().includes(term),
+      );
+    }
+
+    // Sort by date
+    filtered.sort((a, b) => {
+      const dateA = new Date(a.appliedDate).getTime();
+      const dateB = new Date(b.appliedDate).getTime();
+      return sortOrder === "latest" ? dateB - dateA : dateA - dateB;
+    });
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setFilteredApplications(filtered);
+  }, [applications, searchTerm, statusFilter, sortOrder]);
 
   const getStatusIcon = (status: string) => {
     switch (status) {
@@ -518,7 +620,7 @@ export default function DashboardPage() {
 
   return (
     <Container>
-      <Navbar>
+      {/* <Navbar>
         <NavContent>
           <Logo>
             <Briefcase size={28} color="#667eea" />
@@ -541,7 +643,7 @@ export default function DashboardPage() {
             </UserInfo>
           </NavLinks>
         </NavContent>
-      </Navbar>
+      </Navbar> */}
 
       <MainContent>
         <WelcomeSection>
@@ -608,8 +710,104 @@ export default function DashboardPage() {
           </AddButton>
         </SectionHeader>
 
+        {/* Search and Filter Bar */}
+        <SearchBar>
+          <SearchInput>
+            <Search size={16} color="#9ca3af" />
+            <input
+              type="text"
+              placeholder="Search by job title or company..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </SearchInput>
+
+          <FilterSelect
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="ALL">All Status</option>
+            <option value="APPLIED">Applied</option>
+            <option value="PHONE_SCREEN">Phone Screen</option>
+            <option value="TECHNICAL">Technical</option>
+            <option value="ONSITE">Onsite</option>
+            <option value="OFFER">Offer</option>
+            <option value="REJECTED">Rejected</option>
+          </FilterSelect>
+
+          <SortButton onClick={() => setShowSortMenu(!showSortMenu)}>
+            <Filter size={14} />
+            {sortOrder === "latest" ? "Latest First" : "Oldest First"}
+            <ChevronDown size={14} />
+          </SortButton>
+        </SearchBar>
+
+        {/* Hidden sort menu (simple inline options) */}
+        {showSortMenu && (
+          <div
+            style={{
+              position: "absolute",
+              background: "white",
+              borderRadius: "0.5rem",
+              boxShadow: "0 4px 12px rgba(0,0,0,0.15)",
+              marginTop: "2.5rem",
+              zIndex: 10,
+            }}
+          >
+            <button
+              onClick={() => {
+                setSortOrder("latest");
+                setShowSortMenu(false);
+              }}
+              style={{
+                display: "block",
+                width: "100%",
+                padding: "0.5rem 1rem",
+                border: "none",
+                background: "none",
+                cursor: "pointer",
+                textAlign: "left",
+                borderRadius: "0.5rem",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = "#f3f4f6")
+              }
+              onMouseLeave={(e) => (e.currentTarget.style.background = "white")}
+            >
+              Latest First
+            </button>
+            <button
+              onClick={() => {
+                setSortOrder("oldest");
+                setShowSortMenu(false);
+              }}
+              style={{
+                display: "block",
+                width: "100%",
+                padding: "0.5rem 1rem",
+                border: "none",
+                background: "none",
+                cursor: "pointer",
+                textAlign: "left",
+                borderRadius: "0.5rem",
+              }}
+              onMouseEnter={(e) =>
+                (e.currentTarget.style.background = "#f3f4f6")
+              }
+              onMouseLeave={(e) => (e.currentTarget.style.background = "white")}
+            >
+              Oldest First
+            </button>
+          </div>
+        )}
+
+        <ResultsCount>
+          Showing {filteredApplications.length} of {applications.length}{" "}
+          applications
+        </ResultsCount>
+
         <ApplicationsGrid>
-          {applications.map((app) => (
+          {filteredApplications.map((app) => (
             <ApplicationCard
               key={app.id}
               onClick={() => router.push(`/applications/${app.id}`)}
@@ -668,13 +866,17 @@ export default function DashboardPage() {
             </ApplicationCard>
           ))}
 
-          {applications.length === 0 && (
+          {filteredApplications.length === 0 && (
             <EmptyState>
               <FileText
                 size={48}
                 style={{ marginBottom: "1rem", color: "rgba(255,255,255,0.5)" }}
               />
-              <p>No applications yet. Start tracking your job hunt!</p>
+              <p>
+                {searchTerm || statusFilter !== "ALL"
+                  ? "No matching applications found. Try adjusting your search or filter."
+                  : "No applications yet. Start tracking your job hunt!"}
+              </p>
               <AddButton
                 href="/applications/new"
                 style={{ background: "white" }}

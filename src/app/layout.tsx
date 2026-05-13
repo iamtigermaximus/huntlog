@@ -4,6 +4,7 @@ import { SessionProvider } from "next-auth/react";
 import { Toaster } from "react-hot-toast";
 import StyledComponentsRegistry from "@/lib/registry";
 import "@/styles/globals.css";
+import Navbar from "@/components/common/Navbar";
 
 export default function RootLayout({
   children,
@@ -39,6 +40,7 @@ export default function RootLayout({
                 },
               }}
             />
+            <Navbar />
             {children}
           </SessionProvider>
         </StyledComponentsRegistry>
