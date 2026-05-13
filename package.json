@@ -9,16 +9,29 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@prisma/client": "^6.19.3",
+    "bcryptjs": "^3.0.3",
+    "groq-sdk": "^1.2.0",
+    "lucide-react": "^1.14.0",
     "next": "16.2.6",
+    "next-auth": "^4.24.14",
+    "openai": "^6.37.0",
     "react": "19.2.4",
-    "react-dom": "19.2.4"
+    "react-dom": "19.2.4",
+    "react-dropzone": "^15.0.0",
+    "react-hot-toast": "^2.6.0",
+    "react-pdf": "^10.4.1",
+    "styled-components": "^6.4.1"
   },
   "devDependencies": {
-    "@types/node": "^20",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/node": "^20.19.41",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/styled-components": "^5.1.36",
     "eslint": "^9",
     "eslint-config-next": "16.2.6",
+    "prisma": "^6.19.3",
     "typescript": "^5"
   }
 }
