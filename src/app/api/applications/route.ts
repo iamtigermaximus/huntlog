@@ -22,7 +22,19 @@ export async function GET() {
     orderBy: { appliedDate: "desc" },
   });
 
-  return NextResponse.json(applications);
+  // Format dates to ISO strings - only include fields that exist in schema
+  const formattedApplications = applications.map((app) => ({
+    ...app,
+    appliedDate: app.appliedDate.toISOString(),
+    jobPostingDate: app.jobPostingDate?.toISOString() || null,
+    jobExpirationDate: app.jobExpirationDate?.toISOString() || null,
+    offerDeadline: app.offerDeadline?.toISOString() || null,
+    followUpDate: app.followUpDate?.toISOString() || null,
+    confirmationDate: app.confirmationDate?.toISOString() || null,
+    lastUpdated: app.lastUpdated?.toISOString() || null,
+  }));
+
+  return NextResponse.json(formattedApplications);
 }
 
 export async function POST(request: NextRequest) {
@@ -42,18 +54,27 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json();
 
+  // Handle appliedDate - use the date from form or current date
+  let appliedDate = new Date();
+  if (body.appliedDate) {
+    appliedDate = new Date(body.appliedDate);
+    // Set to midnight UTC to avoid timezone issues
+    appliedDate.setUTCHours(0, 0, 0, 0);
+  }
+
   const application = await prisma.application.create({
     data: {
       userId: user.id,
       jobTitle: body.jobTitle,
       company: body.company,
       location: body.location,
-      jobDescription: body.jobDescription,
+      jobDescription: body.jobDescription || "",
       jobUrl: body.jobUrl,
       salaryMin: body.salaryMin ? parseInt(body.salaryMin) : null,
       salaryMax: body.salaryMax ? parseInt(body.salaryMax) : null,
       jobType: body.jobType,
       seniorityLevel: body.seniorityLevel,
+      appliedDate: appliedDate,
       jobExpirationDate: body.jobExpirationDate
         ? new Date(body.jobExpirationDate)
         : null,
@@ -70,5 +91,13 @@ export async function POST(request: NextRequest) {
     },
   });
 
-  return NextResponse.json(application);
+  // Format the response dates - only include fields that exist
+  const formattedApplication = {
+    ...application,
+    appliedDate: application.appliedDate.toISOString(),
+    jobExpirationDate: application.jobExpirationDate?.toISOString() || null,
+    lastUpdated: application.lastUpdated?.toISOString() || null,
+  };
+
+  return NextResponse.json(formattedApplication);
 }

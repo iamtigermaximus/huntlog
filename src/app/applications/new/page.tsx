@@ -885,11 +885,11 @@ import {
   Link as LinkIcon,
   Briefcase,
   Building,
+  StickyNote,
 } from "lucide-react";
 import toast from "react-hot-toast";
 import Link from "next/link";
 
-// ============ Styled Components ============
 const Container = styled.div`
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -1060,7 +1060,6 @@ const Divider = styled.hr`
   border-top: 1px solid #e5e7eb;
 `;
 
-// ============ Component ============
 export default function NewApplicationPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
@@ -1139,7 +1138,6 @@ export default function NewApplicationPage() {
           <Subtitle>Enter the details of the job you applied for</Subtitle>
 
           <Form onSubmit={handleSubmit}>
-            {/* Job Title & Company */}
             <FormRow>
               <FormGroup>
                 <Label>
@@ -1170,7 +1168,6 @@ export default function NewApplicationPage() {
               </FormGroup>
             </FormRow>
 
-            {/* Location & Job URL */}
             <FormRow>
               <FormGroup>
                 <Label>
@@ -1199,7 +1196,6 @@ export default function NewApplicationPage() {
               </FormGroup>
             </FormRow>
 
-            {/* Salary Range */}
             <FormRow>
               <FormGroup>
                 <Label>
@@ -1230,7 +1226,6 @@ export default function NewApplicationPage() {
               </FormGroup>
             </FormRow>
 
-            {/* Job Type & Seniority */}
             <FormRow>
               <FormGroup>
                 <Label>Job Type</Label>
@@ -1263,7 +1258,6 @@ export default function NewApplicationPage() {
               </FormGroup>
             </FormRow>
 
-            {/* Applied Date & Status */}
             <FormRow>
               <FormGroup>
                 <Label>
@@ -1297,7 +1291,6 @@ export default function NewApplicationPage() {
               </FormGroup>
             </FormRow>
 
-            {/* Source */}
             <FormGroup>
               <Label>Source</Label>
               <Select
@@ -1316,7 +1309,6 @@ export default function NewApplicationPage() {
 
             <Divider />
 
-            {/* Job Description */}
             <FormGroup>
               <Label>Job Description</Label>
               <TextArea
@@ -1328,14 +1320,16 @@ export default function NewApplicationPage() {
               />
             </FormGroup>
 
-            {/* Notes */}
             <FormGroup>
-              <Label>Notes</Label>
+              <Label>
+                <StickyNote size={14} />
+                Notes
+              </Label>
               <TextArea
                 name="notes"
                 value={formData.notes}
                 onChange={handleChange}
-                placeholder="Interview notes, follow-up reminders, etc..."
+                placeholder="Interview notes, follow-up reminders, recruiter contact info, etc..."
                 rows={3}
               />
             </FormGroup>
