@@ -1,9 +1,8 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { signOut } from "next-auth/react";
+import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import styled from "styled-components";
 import {
   Briefcase,
@@ -15,6 +14,7 @@ import {
   Briefcase as BriefcaseIcon,
 } from "lucide-react";
 import { useState } from "react";
+import toast from "react-hot-toast";
 
 const NavbarStyled = styled.nav`
   background: white;
@@ -142,11 +142,37 @@ const LogoutButton = styled.button`
 `;
 
 export default function Navbar() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const pathname = usePathname();
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const isActive = (path: string) => pathname === path;
+
+  const handleLogout = async () => {
+    await signOut({ redirect: false });
+    toast.success("Logged out successfully!");
+    router.push("/login");
+    router.refresh();
+  };
+
+  // Don't show navbar on landing page or auth pages
+  if (pathname === "/" || pathname === "/login" || pathname === "/register") {
+    return null;
+  }
+
+  if (status === "loading") {
+    return (
+      <NavbarStyled>
+        <NavContent>
+          <Logo href="/dashboard">
+            <Briefcase size={28} color="#667eea" />
+            <h1>HuntLog</h1>
+          </Logo>
+        </NavContent>
+      </NavbarStyled>
+    );
+  }
 
   return (
     <NavbarStyled>
@@ -164,32 +190,34 @@ export default function Navbar() {
           <NavLink
             href="/dashboard"
             style={{ color: isActive("/dashboard") ? "#667eea" : "#6b7280" }}
+            onClick={() => setMobileMenuOpen(false)}
           >
             <Home size={18} />
             Dashboard
           </NavLink>
 
           <NavLink
-            href="/cover-letter-generator"
+            href="/applications/new"
             style={{
-              color: isActive("/cover-letter-generator")
-                ? "#667eea"
-                : "#6b7280",
+              color: isActive("/applications/new") ? "#667eea" : "#6b7280",
             }}
+            onClick={() => setMobileMenuOpen(false)}
           >
-            <FileEdit size={18} />
-            Cover Letter
+            <BriefcaseIcon size={18} />
+            Add Application
           </NavLink>
 
-          <UserInfo>
-            <UserName>
-              👋 {session?.user?.name || session?.user?.email?.split("@")[0]}
-            </UserName>
-            <LogoutButton onClick={() => signOut()}>
-              <LogOut size={18} />
-              <span>Logout</span>
-            </LogoutButton>
-          </UserInfo>
+          {session && (
+            <UserInfo>
+              <UserName>
+                👋 {session?.user?.name || session?.user?.email?.split("@")[0]}
+              </UserName>
+              <LogoutButton onClick={handleLogout}>
+                <LogOut size={18} />
+                <span>Logout</span>
+              </LogoutButton>
+            </UserInfo>
+          )}
         </NavLinks>
       </NavContent>
     </NavbarStyled>
