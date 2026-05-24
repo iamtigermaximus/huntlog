@@ -9,9 +9,10 @@ import {
   LogOut,
   Menu,
   X,
-  FileEdit,
   Home,
   Briefcase as BriefcaseIcon,
+  Sparkles,
+  TrendingUp,
 } from "lucide-react";
 import { useState } from "react";
 import toast from "react-hot-toast";
@@ -204,8 +205,32 @@ export default function Navbar() {
             onClick={() => setMobileMenuOpen(false)}
           >
             <BriefcaseIcon size={18} />
-            Add Application
+            Add Job
           </NavLink>
+
+          {/* ✅ COVER LETTER GENERATOR - ADDED BACK */}
+          <NavLink
+            href="/cover-letter-generator"
+            style={{
+              color: isActive("/cover-letter") ? "#667eea" : "#6b7280",
+            }}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <Sparkles size={18} />
+            Cover Letter
+          </NavLink>
+
+          {/* ✅ JOB MATCHER - ADDED */}
+          {/* <NavLink
+            href="/jobs/match"
+            style={{
+              color: isActive("/jobs/match") ? "#667eea" : "#6b7280",
+            }}
+            onClick={() => setMobileMenuOpen(false)}
+          >
+            <TrendingUp size={18} />
+            Job Matcher
+          </NavLink> */}
 
           {session && (
             <UserInfo>
