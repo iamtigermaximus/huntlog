@@ -3,7 +3,7 @@
 import { useState } from "react";
 import styled from "styled-components";
 import { Check, X, RefreshCw, Edit3, FileText, Download, Expand, Minimize } from "lucide-react";
-import { generateResumePDF, generateCoverLetterPDF } from "@/lib/generate-pdf";
+import { generateFormattedResumePDF, generateCoverLetterPDF } from "@/lib/generate-pdf";
 
 const Card = styled.div<{ $status: "pending" | "approved" | "rejected" }>`
   background: white;
@@ -214,13 +214,32 @@ export default function AIApprovalCard({
     setEditing(false);
   };
 
-  const handleDownloadPDF = () => {
-    const isCoverLetter = contentType.toLowerCase().includes("cover letter");
+  const [downloadingPDF, setDownloadingPDF] = useState(false);
+
+  const handleDownloadPDF = async () => {
     const isResume = contentType.toLowerCase().includes("resume");
-    if (isCoverLetter) {
-      generateCoverLetterPDF(content);
-    } else if (isResume) {
-      generateResumePDF(content);
+    if (isResume) {
+      setDownloadingPDF(true);
+      try {
+        const res = await fetch("/api/ai/parse-resume", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ resumeText: content }),
+        });
+        if (res.ok) {
+          const structured = await res.json();
+          generateFormattedResumePDF(structured);
+        } else {
+          // Fallback: generate with whatever we have
+          const fallback = { name: "", title: "", contact: {}, summary: content, experience: [], education: [], certifications: [], skills: [] };
+          generateFormattedResumePDF(fallback);
+        }
+      } catch {
+        const fallback = { name: "", title: "", contact: {}, summary: content, experience: [], education: [], certifications: [], skills: [] };
+        generateFormattedResumePDF(fallback);
+      } finally {
+        setDownloadingPDF(false);
+      }
     } else {
       generateCoverLetterPDF(content);
     }
@@ -297,15 +316,15 @@ export default function AIApprovalCard({
             <ActionButton $variant="secondary" onClick={onRegenerate} disabled={loading}>
               <RefreshCw size={14} /> Regenerate
             </ActionButton>
-            <ActionButton $variant="pdf" onClick={handleDownloadPDF}>
-              <Download size={14} /> Download PDF
+            <ActionButton $variant="pdf" onClick={handleDownloadPDF} disabled={downloadingPDF}>
+              <Download size={14} /> {downloadingPDF ? "Generating..." : "Download PDF"}
             </ActionButton>
           </>
         )}
         {!editing && status === "approved" && (
           <>
-            <ActionButton $variant="pdf" onClick={handleDownloadPDF}>
-              <Download size={14} /> Download PDF
+            <ActionButton $variant="pdf" onClick={handleDownloadPDF} disabled={downloadingPDF}>
+              <Download size={14} /> {downloadingPDF ? "Generating..." : "Download PDF"}
             </ActionButton>
             <ActionButton $variant="secondary" onClick={handleStartEdit}>
               <Edit3 size={14} /> Edit
@@ -323,8 +342,8 @@ export default function AIApprovalCard({
             <ActionButton $variant="secondary" onClick={onRegenerate} disabled={loading}>
               <RefreshCw size={14} /> Regenerate
             </ActionButton>
-            <ActionButton $variant="pdf" onClick={handleDownloadPDF}>
-              <Download size={14} /> Download PDF
+            <ActionButton $variant="pdf" onClick={handleDownloadPDF} disabled={downloadingPDF}>
+              <Download size={14} /> {downloadingPDF ? "Generating..." : "Download PDF"}
             </ActionButton>
           </>
         )}
