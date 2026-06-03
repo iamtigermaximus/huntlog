@@ -25,6 +25,7 @@ export interface StructuredResume {
   summary: string;
   experience: ResumeExperience[];
   education: ResumeEducation[];
+  certifications: string[];
   skills: string[];
 }
 
@@ -62,6 +63,7 @@ Return ONLY valid JSON:
       "year": "2020"
     }
   ],
+  "certifications": ["AWS Solutions Architect", "Certified Scrum Master"],
   "skills": ["Skill1", "Skill2", "Skill3"]
 }
 
