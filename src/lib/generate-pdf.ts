@@ -15,16 +15,17 @@ function checkPage(doc: jsPDF, y: number, needed = 15): number {
 }
 
 function sectionHeader(doc: jsPDF, y: number, text: string): number {
-  y = checkPage(doc, y, 12);
-  doc.setFontSize(11);
+  y = checkPage(doc, y, 14);
+  doc.setFontSize(10.5);
   doc.setFont("helvetica", "bold");
+  doc.setTextColor(17, 24, 39);
   doc.text(text.toUpperCase(), MARGIN, y);
-  y += 5;
-  // Horizontal rule
-  doc.setDrawColor(209, 213, 219);
-  doc.setLineWidth(0.3);
+  y += 4.5;
+  // Horizontal rule — dark and visible
+  doc.setDrawColor(55, 65, 81);
+  doc.setLineWidth(0.6);
   doc.line(MARGIN, y, PAGE_W - MARGIN, y);
-  return y + 4;
+  return y + 5;
 }
 
 // ── Plain cover letter (unchanged) ──────────────────
@@ -67,11 +68,11 @@ export function generateFormattedResumePDF(resume: StructuredResume, filename?: 
   let y = MARGIN;
 
   // ═══════════ HEADER (centered) ═══════════
-  doc.setFontSize(18);
+  doc.setFontSize(22);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(17, 24, 39);
   doc.text(resume.name || "Resume", PAGE_W / 2, y, { align: "center" });
-  y += 9;
+  y += 10;
 
   // Contact line (centered)
   const contactParts: string[] = [];
@@ -86,15 +87,15 @@ export function generateFormattedResumePDF(resume: StructuredResume, filename?: 
     doc.setFont("helvetica", "normal");
     doc.setTextColor(75, 85, 99);
     doc.text(contactParts.join("  |  "), PAGE_W / 2, y, { align: "center" });
-    y += 4;
+    y += 5;
   }
 
-  // Thin rule below header
+  // Dark rule below header
   y += 3;
   doc.setDrawColor(55, 65, 81);
-  doc.setLineWidth(0.5);
+  doc.setLineWidth(0.7);
   doc.line(MARGIN, y, PAGE_W - MARGIN, y);
-  y += 6;
+  y += 8;
 
   doc.setTextColor(26, 26, 26);
 
@@ -103,34 +104,35 @@ export function generateFormattedResumePDF(resume: StructuredResume, filename?: 
     y = sectionHeader(doc, y, "Summary");
     doc.setFontSize(9.5);
     doc.setFont("helvetica", "normal");
+    doc.setTextColor(55, 65, 81);
     const summaryLines = doc.splitTextToSize(resume.summary, MAX_W);
     for (const line of summaryLines) {
       y = checkPage(doc, y, LINE_H);
       doc.text(line, MARGIN, y);
       y += LINE_H;
     }
-    y += 3;
+    y += 4;
   }
 
   // ═══════════ EXPERIENCE ═══════════
   if (resume.experience.length > 0) {
     y = sectionHeader(doc, y, "Experience");
     for (const exp of resume.experience) {
-      y = checkPage(doc, y, 20);
+      y = checkPage(doc, y, 22);
 
       // Title (bold, left) + dates (normal, right) on same line
       doc.setFontSize(10.5);
       doc.setFont("helvetica", "bold");
+      doc.setTextColor(17, 24, 39);
       doc.text(exp.title, MARGIN, y);
 
       if (exp.dates && exp.dates !== "null") {
         doc.setFontSize(9);
         doc.setFont("helvetica", "normal");
-        doc.setTextColor(107, 114, 128);
+        doc.setTextColor(75, 85, 99);
         doc.text(exp.dates, PAGE_W - MARGIN, y, { align: "right" });
-        doc.setTextColor(26, 26, 26);
       }
-      y += LINE_H;
+      y += LINE_H + 1;
 
       // Company name below title
       if (exp.company && exp.company !== "null") {
@@ -138,29 +140,27 @@ export function generateFormattedResumePDF(resume: StructuredResume, filename?: 
         doc.setFont("helvetica", "italic");
         doc.setTextColor(55, 65, 81);
         doc.text(exp.company, MARGIN, y);
-        doc.setTextColor(26, 26, 26);
         y += LINE_H + 1;
       }
 
       // Bullet points
       doc.setFontSize(9);
       doc.setFont("helvetica", "normal");
+      doc.setTextColor(55, 65, 81);
       for (const bullet of exp.bullets) {
         if (bullet === "null") continue;
         y = checkPage(doc, y, LINE_H);
         const bulletLines = doc.splitTextToSize(bullet, MAX_W - 5);
-        // First line with bullet
         doc.text("•", MARGIN + 2, y);
         doc.text(bulletLines[0], MARGIN + 7, y);
         y += LINE_H;
-        // Continuation lines
         for (let i = 1; i < bulletLines.length; i++) {
           y = checkPage(doc, y, LINE_H);
           doc.text(bulletLines[i], MARGIN + 7, y);
           y += LINE_H;
         }
       }
-      y += 2;
+      y += 3;
     }
   }
 
@@ -168,21 +168,21 @@ export function generateFormattedResumePDF(resume: StructuredResume, filename?: 
   if (resume.education.length > 0) {
     y = sectionHeader(doc, y, "Education");
     for (const edu of resume.education) {
-      y = checkPage(doc, y, 10);
+      y = checkPage(doc, y, 12);
 
       // Degree (bold, left) + year (right)
       doc.setFontSize(10.5);
       doc.setFont("helvetica", "bold");
+      doc.setTextColor(17, 24, 39);
       doc.text(edu.degree, MARGIN, y);
 
       if (edu.year && edu.year !== "null") {
         doc.setFontSize(9);
         doc.setFont("helvetica", "normal");
-        doc.setTextColor(107, 114, 128);
+        doc.setTextColor(75, 85, 99);
         doc.text(edu.year, PAGE_W - MARGIN, y, { align: "right" });
-        doc.setTextColor(26, 26, 26);
       }
-      y += LINE_H;
+      y += LINE_H + 1;
 
       // School below degree
       if (edu.school && edu.school !== "null") {
@@ -190,10 +190,9 @@ export function generateFormattedResumePDF(resume: StructuredResume, filename?: 
         doc.setFont("helvetica", "italic");
         doc.setTextColor(55, 65, 81);
         doc.text(edu.school, MARGIN, y);
-        doc.setTextColor(26, 26, 26);
         y += LINE_H + 1;
       }
-      y += 1;
+      y += 2;
     }
     y += 2;
   }
@@ -203,12 +202,13 @@ export function generateFormattedResumePDF(resume: StructuredResume, filename?: 
     y = sectionHeader(doc, y, "Certifications");
     doc.setFontSize(9.5);
     doc.setFont("helvetica", "normal");
+    doc.setTextColor(55, 65, 81);
     for (const cert of resume.certifications) {
       y = checkPage(doc, y, LINE_H);
       doc.text(`•  ${cert}`, MARGIN + 2, y);
       y += LINE_H;
     }
-    y += 3;
+    y += 4;
   }
 
   // ═══════════ SKILLS ═══════════
@@ -217,6 +217,7 @@ export function generateFormattedResumePDF(resume: StructuredResume, filename?: 
     const skillsText = resume.skills.filter(s => s !== "null").join("  •  ");
     doc.setFontSize(9);
     doc.setFont("helvetica", "normal");
+    doc.setTextColor(55, 65, 81);
     const skillLines = doc.splitTextToSize(skillsText, MAX_W);
     for (const line of skillLines) {
       y = checkPage(doc, y, LINE_H);
