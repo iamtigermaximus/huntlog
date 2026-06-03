@@ -1,8 +1,3 @@
-// export { default } from "next-auth/middleware";
-
-// export const config = {
-//   matcher: ["/:path*", "/dashboard/:path*", "/applications/:path*"],
-// };
 import { NextRequest, NextResponse } from "next/server";
 import { getToken } from "next-auth/jwt";
 
@@ -28,5 +23,15 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/applications/:path*", "/login", "/register"],
+  matcher: [
+    "/dashboard/:path*",
+    "/applications/:path*",
+    "/ai-hub/:path*",
+    "/job-matches/:path*",
+    "/resumes/:path*",
+    "/interview-prep/:path*",
+    "/cover-letter-generator/:path*",
+    "/login",
+    "/register",
+  ],
 };

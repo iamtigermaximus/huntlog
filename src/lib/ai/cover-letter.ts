@@ -6,11 +6,16 @@ export async function generateCoverLetter(
   company: string,
   jobTitle: string,
   strengths: string[],
+  additionalInstructions?: string,
 ): Promise<string> {
   const strengthsText =
     strengths.length > 0
       ? `\n\nKey strengths from analysis: ${strengths.join(", ")}`
       : "";
+
+  const instructionsText = additionalInstructions
+    ? `\n\nSPECIAL INSTRUCTIONS:\n${additionalInstructions}\nPlease incorporate these instructions.`
+    : "";
 
   const prompt = `Write a professional cover letter.
 
@@ -21,7 +26,7 @@ JOB DESCRIPTION:
 ${jobDescription.substring(0, 2500)}
 
 MY RESUME:
-${resumeContent.substring(0, 2500)}${strengthsText}
+${resumeContent.substring(0, 2500)}${strengthsText}${instructionsText}
 
 Requirements:
 - Professional, confident tone

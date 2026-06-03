@@ -1304,7 +1304,7 @@
 // }
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import styled from "styled-components";
 import {
   Sparkles,
@@ -1322,6 +1322,7 @@ import {
 } from "lucide-react";
 import toast from "react-hot-toast";
 import { useDropzone } from "react-dropzone";
+import { generateCoverLetterPDF } from "@/lib/generate-pdf";
 
 // ============ Types ============
 interface FormData {
@@ -1634,6 +1635,42 @@ export default function CoverLetterGenerator() {
 
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
+  const [hasActiveResume, setHasActiveResume] = useState(false);
+
+  // Auto-load active resume from Resume Manager
+  const loadActiveResume = useCallback(async () => {
+    try {
+      const res = await fetch("/api/resumes");
+      const resumes = await res.json();
+      if (Array.isArray(resumes)) {
+        const active = resumes.find((r: { isActive: boolean }) => r.isActive);
+        if (active?.content) {
+          setResumeContent(active.content);
+          setResumeFile(null);
+          setHasActiveResume(true);
+          toast.success(`Loaded active resume: ${active.name}`);
+          return;
+        }
+      }
+      toast.error("No active resume found. Set one in Resume Manager or upload a file.");
+    } catch {
+      toast.error("Failed to load active resume");
+    }
+  }, []);
+
+  // Load active resume on mount
+  useEffect(() => {
+    fetch("/api/resumes")
+      .then((r) => r.json())
+      .then((data) => {
+        const active = Array.isArray(data) ? data.find((r: { isActive: boolean }) => r.isActive) : null;
+        if (active?.content) {
+          setResumeContent(active.content);
+          setHasActiveResume(true);
+        }
+      })
+      .catch(() => {});
+  }, []);
 
   // Function to extract text from PDF using browser's built-in PDF.js
   const extractTextFromPDF = async (file: File): Promise<string> => {
@@ -1889,6 +1926,12 @@ export default function CoverLetterGenerator() {
     toast.success("Download started!");
   };
 
+  // Download as PDF
+  const handleDownloadPDF = (): void => {
+    generateCoverLetterPDF(generatedLetter, formData.company);
+    toast.success("PDF downloaded!");
+  };
+
   // Print
   const handlePrint = (): void => {
     const printWindow: Window | null = window.open("", "_blank");
@@ -1984,6 +2027,28 @@ export default function CoverLetterGenerator() {
                 text paste is more reliable.
               </div>
             </InfoBox>
+
+            <button
+              type="button"
+              onClick={loadActiveResume}
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "0.4rem",
+                padding: "0.5rem 1rem",
+                background: hasActiveResume ? "#ede9fe" : "#f3f4f6",
+                color: hasActiveResume ? "#667eea" : "#6b7280",
+                border: `1px solid ${hasActiveResume ? "#c4b5fd" : "#e5e7eb"}`,
+                borderRadius: "0.5rem",
+                fontSize: "0.8rem",
+                fontWeight: 500,
+                cursor: "pointer",
+                marginBottom: "0.75rem",
+              }}
+            >
+              <FileText size={14} />
+              {hasActiveResume ? "Active Resume Loaded (click to reload)" : "Use Active Resume from Resume Manager"}
+            </button>
 
             <div {...getRootProps()}>
               <input {...getInputProps()} />
@@ -2200,7 +2265,11 @@ export default function CoverLetterGenerator() {
                 </Button>
                 <Button $variant="secondary" onClick={handleDownload}>
                   <Download size={16} />
-                  Save
+                  Save HTML
+                </Button>
+                <Button $variant="secondary" onClick={handleDownloadPDF}>
+                  <Download size={16} />
+                  PDF
                 </Button>
                 <Button $variant="secondary" onClick={handlePrint}>
                   <Printer size={16} />

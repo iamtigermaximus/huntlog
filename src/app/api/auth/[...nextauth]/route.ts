@@ -31,12 +31,12 @@ const handler = NextAuth({
       // Auto-create user account for Google sign-in
       if (account?.provider === "google") {
         try {
-          const existingUser = await prisma.user.findUnique({
+          let existingUser = await prisma.user.findUnique({
             where: { email: user.email! },
           });
 
           if (!existingUser) {
-            await prisma.user.create({
+            existingUser = await prisma.user.create({
               data: {
                 email: user.email!,
                 name: user.name || user.email!.split("@")[0],
@@ -44,6 +44,9 @@ const handler = NextAuth({
               },
             });
           }
+
+          // Set user.id to the database user ID so the JWT stores the correct ID
+          user.id = existingUser.id;
         } catch (error) {
           console.error("Google sign-in error:", error);
           return false;

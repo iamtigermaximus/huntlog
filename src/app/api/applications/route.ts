@@ -88,6 +88,8 @@ export async function POST(request: NextRequest) {
       confirmationReceived: body.confirmationReceived || false,
       confirmationNotes: body.confirmationNotes,
       source: body.source,
+      autoApplied: body.autoApplied || false,
+      applicationPackage: body.applicationPackage || null,
     },
   });
 
