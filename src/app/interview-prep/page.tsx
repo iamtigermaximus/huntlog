@@ -14,7 +14,7 @@ import { AIThinkingIndicator, AIAgentBadge, AIProgressSteps } from "@/components
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f172a;
 `;
 
 const MainContent = styled.main`
@@ -92,7 +92,7 @@ const GenerateBtn = styled.button`
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #0f172a;
   color: white;
   border: none;
   border-radius: 0.75rem;

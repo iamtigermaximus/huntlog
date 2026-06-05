@@ -15,7 +15,7 @@ import { AIScoreCircle, AIThinkingIndicator, AIAgentBadge, AIProgressSteps } fro
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f172a;
 `;
 
 const MainContent = styled.main`
@@ -107,7 +107,7 @@ const ScrapeButton = styled.button`
   align-items: center;
   gap: 0.5rem;
   padding: 0.75rem 2rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #0f172a;
   color: white;
   border: none;
   border-radius: 0.75rem;
@@ -223,7 +223,7 @@ const SkillsRow = styled.div`
 const SkillTag = styled.span`
   font-size: 0.6rem;
   padding: 0.15rem 0.5rem;
-  background: linear-gradient(135deg, rgba(102,126,234,0.1), rgba(118,75,162,0.1));
+  background: rgba(15, 23, 42, 0.05);
   color: #667eea;
   border-radius: 9999px;
   font-weight: 500;
@@ -237,7 +237,7 @@ const ActionButtons = styled.div`
 
 const ApplyButton = styled.button`
   padding: 0.4rem 1rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #0f172a;
   color: white;
   border: none;
   border-radius: 0.5rem;

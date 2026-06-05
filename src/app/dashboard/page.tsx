@@ -29,7 +29,7 @@ import toast from "react-hot-toast";
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f172a;
 `;
 
 const Navbar = styled.nav`
@@ -61,7 +61,7 @@ const Logo = styled.div`
   h1 {
     font-size: 1.5rem;
     font-weight: bold;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #0f172a;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

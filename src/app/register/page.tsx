@@ -13,7 +13,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f172a;
   padding: 1rem;
 `;
 
@@ -41,7 +41,7 @@ const Logo = styled.div`
   h1 {
     font-size: 1.875rem;
     font-weight: bold;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #0f172a;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -112,7 +112,7 @@ const Input = styled.input`
 `;
 
 const Button = styled.button`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f172a;
   color: white;
   padding: 0.875rem;
   border: none;

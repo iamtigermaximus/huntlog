@@ -13,7 +13,7 @@ import toast from "react-hot-toast";
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f172a;
 `;
 
 const MainContent = styled.main`
@@ -114,7 +114,7 @@ const Textarea = styled.textarea`
 
 const SubmitButton = styled.button`
   padding: 0.6rem 1.5rem;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #0f172a;
   color: white;
   border: none;
   border-radius: 0.5rem;

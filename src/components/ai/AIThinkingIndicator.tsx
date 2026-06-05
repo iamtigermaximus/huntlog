@@ -18,7 +18,7 @@ const Wrapper = styled.div`
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem 1rem;
-  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08), rgba(118, 75, 162, 0.08));
+  background: rgba(15, 23, 42, 0.04);
   border-radius: 0.75rem;
   border: 1px solid rgba(102, 126, 234, 0.15);
 `;
@@ -30,7 +30,7 @@ const IconWrapper = styled.div`
   justify-content: center;
   width: 32px;
   height: 32px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #0f172a;
   border-radius: 50%;
   animation: ${shimmer} 2s linear infinite;
   background-size: 200% 100%;

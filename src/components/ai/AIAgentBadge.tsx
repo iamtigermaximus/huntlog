@@ -15,7 +15,7 @@ const Badge = styled.div<{ $active: boolean }>`
   padding: 0.25rem 0.65rem;
   background: ${(props) =>
     props.$active
-      ? "linear-gradient(135deg, rgba(102, 126, 234, 0.12), rgba(118, 75, 162, 0.12))"
+      ? "rgba(15, 23, 42, 0.06)"
       : "#f3f4f6"};
   border: 1px solid ${(props) => (props.$active ? "#667eea" : "#e5e7eb")};
   border-radius: 9999px;

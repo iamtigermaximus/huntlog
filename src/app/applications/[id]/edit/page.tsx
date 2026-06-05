@@ -19,7 +19,7 @@ import toast from "react-hot-toast";
 // ============ Styled Components ============
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f172a;
   padding: 2rem;
 
   @media (max-width: 768px) {

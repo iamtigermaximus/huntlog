@@ -49,7 +49,7 @@ const Logo = styled(Link)`
   h1 {
     font-size: 1.5rem;
     font-weight: bold;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: #0f172a;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -116,7 +116,7 @@ const AIBadge = styled.span`
   font-weight: 700;
   padding: 0.1rem 0.35rem;
   border-radius: 9999px;
-  background: linear-gradient(135deg, #667eea, #764ba2);
+  background: #0f172a;
   color: white;
   text-transform: uppercase;
   letter-spacing: 0.05em;

@@ -27,7 +27,7 @@ import { AIThinkingIndicator, AIAgentBadge, AIScoreCircle } from "@/components/a
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f172a;
 `;
 
 const MainContent = styled.main`
@@ -278,7 +278,7 @@ const agents = [
     title: "Job Scraper Agent",
     description: "AI searches and matches jobs based on your resume skills and preferences. Get ranked results with match scores.",
     icon: <Search size={22} color="white" />,
-    color: "linear-gradient(135deg, #667eea, #764ba2)",
+    color: "#0f172a",
     href: "/job-matches",
     cta: "Find Matching Jobs",
   },
@@ -287,7 +287,7 @@ const agents = [
     title: "Cover Letter Generator",
     description: "AI generates tailored cover letters for each application, highlighting your most relevant achievements.",
     icon: <FileText size={22} color="white" />,
-    color: "linear-gradient(135deg, #10b981, #059669)",
+    color: "#10b981",
     href: "/cover-letter-generator",
     cta: "Generate Cover Letter",
   },
@@ -296,7 +296,7 @@ const agents = [
     title: "Resume Optimizer",
     description: "AI tailors your resume for specific jobs, optimizing keywords and highlighting matching experience.",
     icon: <Target size={22} color="white" />,
-    color: "linear-gradient(135deg, #f59e0b, #d97706)",
+    color: "#f59e0b",
     href: "/resumes",
     cta: "Optimize Resume",
   },
@@ -305,7 +305,7 @@ const agents = [
     title: "Interview Prep Agent",
     description: "AI generates role-specific interview questions with suggested answers based on your experience.",
     icon: <Brain size={22} color="white" />,
-    color: "linear-gradient(135deg, #ef4444, #dc2626)",
+    color: "#ef4444",
     href: "/interview-prep",
     cta: "Prepare for Interviews",
   },
@@ -314,7 +314,7 @@ const agents = [
     title: "Job Detail Extractor",
     description: "Paste a job URL and AI extracts all details — title, company, requirements, and auto-fills your application.",
     icon: <Zap size={22} color="white" />,
-    color: "linear-gradient(135deg, #8b5cf6, #7c3aed)",
+    color: "#8b5cf6",
     href: "/applications/new",
     cta: "Auto-Fill Application",
   },
@@ -323,7 +323,7 @@ const agents = [
     title: "Application Monitor",
     description: "AI monitors your pipeline, detects ghosted applications, suggests follow-ups, and alerts on expiring jobs.",
     icon: <Shield size={22} color="white" />,
-    color: "linear-gradient(135deg, #06b6d4, #0891b2)",
+    color: "#06b6d4",
     href: "/dashboard",
     cta: "Monitor Pipeline",
   },

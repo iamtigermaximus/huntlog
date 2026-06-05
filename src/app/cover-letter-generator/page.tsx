@@ -16,7 +16,7 @@
 // // // Styled Components
 // // const Container = styled.div`
 // //   min-height: 100vh;
-// //   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+// //   background: #0f172a;
 // //   padding: 2rem;
 // // `;
 
@@ -121,7 +121,7 @@
 
 // // const GenerateButton = styled.button`
 // //   width: 100%;
-// //   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+// //   background: #0f172a;
 // //   color: white;
 // //   padding: 0.875rem;
 // //   border: none;
@@ -555,7 +555,7 @@
 // // ============ Styled Components ============
 // const Container = styled.div`
 //   min-height: 100vh;
-//   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+//   background: #0f172a;
 //   padding: 2rem;
 
 //   @media (max-width: 768px) {
@@ -727,7 +727,7 @@
 // `;
 
 // const AnalysisCard = styled.div`
-//   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+//   background: #0f172a;
 //   color: white;
 //   padding: 1rem;
 //   border-radius: 0.75rem;
@@ -1342,7 +1342,7 @@ interface AnalysisResult {
 // ============ Styled Components ============
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f172a;
   padding: 2rem;
 
   @media (max-width: 768px) {
@@ -1518,7 +1518,7 @@ const Button = styled.button<{
 `;
 
 const AnalysisCard = styled.div`
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f172a;
   color: white;
   padding: 1rem;
   border-radius: 0.75rem;

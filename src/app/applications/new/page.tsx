@@ -25,7 +25,7 @@
 
 // const Container = styled.div`
 //   min-height: 100vh;
-//   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+//   background: #0f172a;
 //   padding: 2rem;
 
 //   @media (max-width: 768px) {
@@ -250,7 +250,7 @@
 // `;
 
 // const AnalysisCard = styled.div`
-//   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+//   background: #0f172a;
 //   color: white;
 //   padding: 1.25rem;
 //   border-radius: 1rem;
@@ -892,7 +892,7 @@ import Link from "next/link";
 
 const Container = styled.div`
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: #0f172a;
   padding: 2rem;
 
   @media (max-width: 768px) {
